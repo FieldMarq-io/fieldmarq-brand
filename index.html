@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FieldMarq — Brand Guidelines</title>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&f[]=cabinet-grotesk@400,500,700,800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal-bright: #00C9A7;
+    --teal-mid:    #0097A7;
+    --teal-deep:   #006073;
+    --teal-dark:   #00353F;
+    --gray-900:    #0D1F24;
+    --gray-600:    #4A6670;
+    --gray-400:    #8FA8AE;
+    --gray-200:    #E2EAEC;
+    --gray-100:    #F0F4F5;
+    --gray-50:     #F8FAFB;
+    --white:       #FFFFFF;
+    --red:         #EF4444;
+    --amber:       #F59E0B;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Satoshi', system-ui, sans-serif;
+    background: var(--white);
+    color: var(--gray-900);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── PAGE LAYOUT ──────────────────────────────────────────────────────── */
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+    page-break-inside: avoid;
+  }
+
+  @media print {
+    .page { margin: 0; page-break-after: always; }
+    body { background: white; }
+  }
+
+  /* ── COVER ──────────────────────────────────────────────────────────────── */
+  .cover {
+    background: var(--gray-900);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0;
+  }
+
+  .cover-top {
+    padding: 52px 52px 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .cover-wordmark {
+    font-family: 'Cabinet Grotesk', 'Satoshi', sans-serif;
+    font-size: 96px;
+    font-weight: 800;
+    letter-spacing: -4px;
+    line-height: 0.9;
+    background: linear-gradient(135deg, #00C9A7 0%, #0097A7 45%, #006073 80%, #00353F 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 32px;
+  }
+
+  .cover-descriptor {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--teal-mid);
+    margin-bottom: 16px;
+  }
+
+  .cover-sub {
+    font-size: 18px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.6;
+    max-width: 340px;
+  }
+
+  .cover-gradient-bar {
+    height: 6px;
+    background: linear-gradient(90deg, #00C9A7, #0097A7, #006073, #00353F);
+    width: 100%;
+    margin-top: 48px;
+  }
+
+  .cover-bottom {
+    padding: 32px 52px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .cover-meta {
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.08em;
+  }
+
+  .cover-version {
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.08em;
+  }
+
+  /* ── LOGO MARK ─────────────────────────────────────────────────────────── */
+  .logo-mark-svg {
+    margin-top: 40px;
+  }
+
+  /* ── SECTION PAGES ─────────────────────────────────────────────────────── */
+  .section-divider {
+    background: var(--gray-50);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 52px;
+  }
+
+  .section-number {
+    font-size: 160px;
+    font-weight: 900;
+    letter-spacing: -8px;
+    line-height: 1;
+    color: var(--gray-200);
+    margin-bottom: -16px;
+  }
+
+  .section-title {
+    font-family: 'Cabinet Grotesk', 'Satoshi', sans-serif;
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    color: var(--gray-900);
+    border-top: 3px solid var(--teal-bright);
+    padding-top: 24px;
+    margin-bottom: 16px;
+  }
+
+  .section-intro {
+    font-size: 14px;
+    color: var(--gray-600);
+    line-height: 1.7;
+    max-width: 400px;
+    font-weight: 400;
+  }
+
+  /* ── CONTENT PAGES ─────────────────────────────────────────────────────── */
+  .content-page {
+    padding: 52px;
+    background: var(--white);
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .page-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal-mid);
+    margin-bottom: 8px;
+  }
+
+  .content-h2 {
+    font-family: 'Cabinet Grotesk', 'Satoshi', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.8px;
+    color: var(--gray-900);
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--gray-200);
+    padding-bottom: 16px;
+  }
+
+  .content-h3 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    margin-bottom: 12px;
+    margin-top: 32px;
+  }
+
+  .body-text {
+    font-size: 12px;
+    color: var(--gray-600);
+    line-height: 1.75;
+    font-weight: 400;
+    margin-bottom: 16px;
+    max-width: 520px;
+  }
+
+  /* ── COLOR SWATCHES ─────────────────────────────────────────────────────── */
+  .swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin-bottom: 32px;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .swatch {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .swatch-color {
+    height: 80px;
+  }
+
+  .swatch-info {
+    padding: 12px;
+    background: var(--gray-50);
+    border-top: 1px solid var(--gray-200);
+  }
+
+  .swatch-name {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 2px;
+  }
+
+  .swatch-hex {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    color: var(--teal-deep);
+    margin-bottom: 2px;
+  }
+
+  .swatch-use {
+    font-size: 10px;
+    color: var(--gray-400);
+    font-style: italic;
+  }
+
+  .swatch-grid-5 {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  /* ── GRADIENT HERO ────────────────────────────────────────────────────── */
+  .gradient-hero {
+    height: 100px;
+    background: linear-gradient(90deg, #00C9A7, #0097A7, #006073, #00353F);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .gradient-label {
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+
+  .gradient-stops {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 32px;
+  }
+
+  .gradient-stop {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    color: var(--gray-400);
+  }
+
+  /* ── LOGO PAGE ────────────────────────────────────────────────────────── */
+  .logo-page {
+    background: var(--gray-900);
+    padding: 52px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .logo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    flex: 1;
+    margin: 40px 0;
+  }
+
+  .logo-cell {
+    padding: 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+  }
+
+  .logo-cell-dark { background: #0D1F24; }
+  .logo-cell-mid  { background: #162830; }
+  .logo-cell-light { background: var(--gray-50); }
+  .logo-cell-white { background: var(--white); }
+
+  .logo-cell-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .logo-wordmark-light { color: white; font-family: 'Cabinet Grotesk', 'Satoshi', sans-serif; font-size: 32px; font-weight: 800; letter-spacing: -1px; }
+  .logo-wordmark-gradient {
+    font-family: 'Cabinet Grotesk', 'Satoshi', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #00C9A7, #006073);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .logo-wordmark-dark { color: var(--gray-900); font-family: 'Cabinet Grotesk', 'Satoshi', sans-serif; font-size: 32px; font-weight: 800; letter-spacing: -1px; }
+
+  /* ── TYPOGRAPHY PAGE ─────────────────────────────────────────────────── */
+  .type-specimen-row {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--gray-100);
+  }
+
+  .type-label {
+    font-family: 'Courier New', monospace;
+    font-size: 9px;
+    color: var(--gray-400);
+    width: 72px;
+    flex-shrink: 0;
+    padding-top: 4px;
+  }
+
+  .type-sample { line-height: 1.1; }
+
+  /* ── COMPONENT PAGES ─────────────────────────────────────────────────── */
+  .component-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    margin-bottom: 16px;
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #00C9A7, #0097A7);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-family: 'Satoshi', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 0.01em;
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--teal-mid);
+    border: 1.5px solid var(--teal-mid);
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-family: 'Satoshi', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--gray-600);
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-family: 'Satoshi', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    cursor: pointer;
+  }
+
+  .btn-dont {
+    background: #7C3AED;
+    color: white;
+    border: none;
+    border-radius: 999px;
+    padding: 10px 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(124,58,237,0.4);
+  }
+
+  /* ── CARD EXAMPLES ────────────────────────────────────────────────────── */
+  .card-comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .card-do {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(13,31,36,0.06);
+  }
+
+  .card-dont {
+    background: #F5F3FF;
+    border: 2px solid #7C3AED;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 8px 30px rgba(124,58,237,0.2);
+  }
+
+  .card-tag {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  .tag-do { background: #E6FBF7; color: #007A65; }
+  .tag-dont { background: #FEE2E2; color: #991B1B; }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 4px;
+  }
+
+  .card-dont .card-title { color: #7C3AED; }
+
+  .card-meta {
+    font-size: 11px;
+    color: var(--gray-400);
+    margin-bottom: 12px;
+  }
+
+  .card-stat {
+    font-family: 'Cabinet Grotesk', 'Satoshi', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--gray-900);
+    letter-spacing: -0.5px;
+  }
+
+  .card-dont .card-stat { color: #7C3AED; }
+
+  .card-stat-label {
+    font-size: 10px;
+    color: var(--gray-400);
+  }
+
+  /* ── BADGE EXAMPLES ────────────────────────────────────────────────────── */
+  .badge-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+  }
+
+  .badge-success { background: #E6FBF7; color: #007A65; }
+  .badge-warning { background: #FEF3C7; color: #92400E; }
+  .badge-error   { background: #FEE2E2; color: #991B1B; }
+  .badge-neutral { background: var(--gray-100); color: var(--gray-600); }
+
+  /* ── DO / DON'T ────────────────────────────────────────────────────────── */
+  .do-dont {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  .do-col { background: var(--white); padding: 20px; }
+  .dont-col { background: #FFFAFA; padding: 20px; border-left: 1px solid var(--gray-200); }
+
+  .do-header {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #007A65;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #E6FBF7;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .dont-header {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--red);
+    padding-bottom: 12px;
+    border-bottom: 2px solid #FEE2E2;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .do-item, .dont-item {
+    font-size: 11px;
+    line-height: 1.6;
+    padding: 5px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    color: var(--gray-600);
+    border-bottom: 1px solid var(--gray-100);
+  }
+
+  .do-item:last-child, .dont-item:last-child { border-bottom: none; }
+
+  .do-dot { color: #00C9A7; font-size: 14px; line-height: 1; flex-shrink: 0; margin-top: 1px; }
+  .dont-dot { color: var(--red); font-size: 14px; line-height: 1; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── DARK MODE PAGE ───────────────────────────────────────────────────── */
+  .dark-page {
+    background: #0D1F24;
+    padding: 52px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .dark-page .page-label { color: var(--teal-mid); }
+  .dark-page .content-h2 { color: white; border-bottom-color: rgba(255,255,255,0.1); }
+  .dark-page .content-h3 { color: rgba(255,255,255,0.3); }
+  .dark-page .body-text { color: #6B9AA4; }
+
+  .dark-sidebar {
+    background: #0D1F24;
+    border-right: 1px solid #1E3840;
+    padding: 24px 0;
+    border-radius: 8px 0 0 8px;
+    overflow: hidden;
+  }
+
+  .dark-nav-item {
+    padding: 10px 20px;
+    font-size: 12px;
+    color: #6B9AA4;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  .dark-nav-item.active {
+    background: rgba(0,201,167,0.1);
+    color: white;
+    border-left: 3px solid var(--teal-bright);
+    padding-left: 17px;
+  }
+
+  .dark-nav-item .nav-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.5;
+    flex-shrink: 0;
+  }
+
+  .dark-nav-item.active .nav-dot {
+    background: var(--teal-bright);
+    opacity: 1;
+  }
+
+  .sidebar-demo {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    border: 1px solid #1E3840;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 200px;
+    margin-bottom: 24px;
+  }
+
+  .content-demo {
+    background: var(--gray-50);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .content-demo-row {
+    height: 10px;
+    background: var(--gray-200);
+    border-radius: 4px;
+  }
+
+  .content-demo-row:first-child { width: 60%; background: var(--gray-900); height: 14px; }
+  .content-demo-row:nth-child(2) { width: 80%; }
+  .content-demo-row:nth-child(3) { width: 70%; }
+
+  /* ── ANTI-PATTERNS PAGE ───────────────────────────────────────────────── */
+  .antipattern-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .antipattern-item {
+    border: 1px solid #FEE2E2;
+    border-radius: 8px;
+    padding: 16px;
+    background: #FFFAFA;
+  }
+
+  .antipattern-name {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--red);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .antipattern-why {
+    font-size: 10px;
+    color: var(--gray-600);
+    line-height: 1.6;
+  }
+
+  .x-mark { color: var(--red); font-size: 12px; }
+
+  /* ── MOTION PAGE ─────────────────────────────────────────────────────── */
+  .motion-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 24px;
+    font-size: 11px;
+  }
+
+  .motion-table th {
+    text-align: left;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--gray-200);
+  }
+
+  .motion-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--gray-600);
+    vertical-align: top;
+  }
+
+  .motion-table tr:last-child td { border-bottom: none; }
+  .motion-table td:first-child { color: var(--gray-900); font-weight: 500; width: 35%; }
+  .motion-table td:nth-child(2) { font-family: 'Courier New', monospace; color: var(--teal-deep); font-size: 10px; width: 35%; }
+
+  /* ── SPACING RULER ───────────────────────────────────────────────────── */
+  .spacing-ruler {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .spacing-block {
+    background: var(--teal-bright);
+    opacity: 0.15;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .spacing-block.active { opacity: 0.6; }
+
+  .spacing-label {
+    font-family: 'Courier New', monospace;
+    font-size: 9px;
+    color: var(--gray-400);
+    text-align: center;
+    margin-top: 4px;
+  }
+
+  .spacing-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ── BACK COVER ──────────────────────────────────────────────────────── */
+  .back-cover {
+    background: var(--gray-900);
+    padding: 52px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .back-large-text {
+    font-family: 'Cabinet Grotesk', 'Satoshi', sans-serif;
+    font-size: 72px;
+    font-weight: 900;
+    letter-spacing: -3px;
+    line-height: 0.9;
+    color: rgba(255,255,255,0.06);
+    margin-bottom: 48px;
+    line-height: 1;
+  }
+
+  .back-tagline {
+    font-size: 14px;
+    color: rgba(255,255,255,0.4);
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 320px;
+    margin-bottom: 48px;
+  }
+
+  .back-url {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--teal-mid);
+  }
+
+  /* ── ICON REFERENCE ──────────────────────────────────────────────────── */
+  .icon-grid {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  .icon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .icon-box {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-600);
+    font-size: 16px;
+  }
+
+  .icon-label {
+    font-size: 9px;
+    color: var(--gray-400);
+    text-align: center;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE 1 — COVER
+═══════════════════════════════════════════════════════ -->
+<div class="page cover">
+  <div class="cover-top">
+    <div class="cover-descriptor">Brand Guidelines · V1.0 · 2026</div>
+    <div class="cover-wordmark">Field<br>Marq</div>
+    <div class="cover-gradient-bar"></div>
+    <div style="margin-top: 32px;">
+      <div class="cover-sub">The field marketing platform that turns events into pipeline — and pipeline into proof.</div>
+    </div>
+
+    <!-- Logo mark in teal ombre -->
+    <svg class="logo-mark-svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
+      <defs>
+        <linearGradient id="logoGrad1" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#00C9A7"/>
+          <stop offset="50%" stop-color="#0097A7"/>
+          <stop offset="100%" stop-color="#006073"/>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="64" height="64" rx="12" fill="url(#logoGrad1)"/>
+      <text x="32" y="44" text-anchor="middle" font-family="Cabinet Grotesk, Satoshi, sans-serif" font-weight="800" font-size="32" fill="white" letter-spacing="-1">FM</text>
+    </svg>
+  </div>
+
+  <div class="cover-bottom">
+    <div class="cover-meta">FieldMarq · fieldmarq.io</div>
+    <div class="cover-version">Internal · Engineering + Founder</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE 2 — SECTION DIVIDER: LOGO
+═══════════════════════════════════════════════════════ -->
+<div class="page section-divider">
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:flex-end;">
+    <div class="section-number">01</div>
+    <div class="section-title">Logo &amp;<br>Wordmark</div>
+    <div class="section-intro">The FieldMarq wordmark is set in Cabinet Grotesk 800. The teal ombre gradient is the brand's most distinctive asset — applied to the wordmark on dark backgrounds and to the icon mark in all contexts.</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE 3 — LOGO SYSTEM
+═══════════════════════════════════════════════════════ -->
+<div class="page logo-page">
+  <div class="page-label">01 — Logo &amp; Wordmark</div>
+
+  <div class="logo-grid">
+    <!-- Dark bg — gradient wordmark -->
+    <div class="logo-cell logo-cell-dark">
+      <div class="logo-wordmark-gradient">FieldMarq</div>
+      <div class="cover-descriptor" style="font-size:9px; color:rgba(255,255,255,0.3); text-align:center;">On dark — gradient</div>
+    </div>
+
+    <!-- Mid dark — white wordmark -->
+    <div class="logo-cell logo-cell-mid">
+      <div class="logo-wordmark-light">FieldMarq</div>
+      <div class="cover-descriptor" style="font-size:9px; color:rgba(255,255,255,0.3); text-align:center;">On dark — white</div>
+    </div>
+
+    <!-- Light bg — gradient wordmark -->
+    <div class="logo-cell logo-cell-light">
+      <div class="logo-wordmark-gradient">FieldMarq</div>
+      <div style="font-size:9px; color:var(--gray-400); letter-spacing:0.1em; text-transform:uppercase;">On light — gradient</div>
+    </div>
+
+    <!-- White bg — dark wordmark -->
+    <div class="logo-cell logo-cell-white">
+      <div class="logo-wordmark-dark">FieldMarq</div>
+      <div style="font-size:9px; color:var(--gray-400); letter-spacing:0.1em; text-transform:uppercase;">On white — dark</div>
+    </div>
+  </div>
+
+  <!-- Icon mark row -->
+  <div style="display:flex; gap:24px; align-items:center; padding: 24px 0; border-top: 1px solid rgba(255,255,255,0.08);">
+    <div style="display:flex; gap:16px; align-items:center;">
+      <!-- Icon on dark -->
+      <svg width="48" height="48" viewBox="0 0 64 64" fill="none">
+        <defs>
+          <linearGradient id="ig1" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#00C9A7"/>
+            <stop offset="100%" stop-color="#006073"/>
+          </linearGradient>
+        </defs>
+        <rect width="64" height="64" rx="12" fill="url(#ig1)"/>
+        <text x="32" y="44" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="28" fill="white">FM</text>
+      </svg>
+      <!-- Icon on teal -->
+      <svg width="48" height="48" viewBox="0 0 64 64" fill="none">
+        <rect width="64" height="64" rx="12" fill="#00353F"/>
+        <text x="32" y="44" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="28" fill="#00C9A7">FM</text>
+      </svg>
+      <!-- Icon on white -->
+      <svg width="48" height="48" viewBox="0 0 64 64" fill="none">
+        <rect width="64" height="64" rx="12" fill="white" stroke="#E2EAEC"/>
+        <defs>
+          <linearGradient id="ig3" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#00C9A7"/>
+            <stop offset="100%" stop-color="#006073"/>
+          </linearGradient>
+        </defs>
+        <text x="32" y="44" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="28" fill="url(#ig3)">FM</text>
+      </svg>
+    </div>
+    <div style="color:rgba(255,255,255,0.3); font-size:10px; letter-spacing:0.1em; text-transform:uppercase;">Icon mark — three approved contexts</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE 4 — SECTION DIVIDER: COLOR
+═══════════════════════════════════════════════════════ -->
+<div class="page section-divider" style="background: var(--gray-900);">
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:flex-end;">
+    <div class="section-number" style="color: rgba(255,255,255,0.07);">02</div>
+    <div class="section-title" style="color:white; border-top-color: var(--teal-bright);">Color<br>System</div>
+    <div class="section-intro" style="color: rgba(255,255,255,0.4);">The teal ombre gradient is FieldMarq's signature. It does not appear on every element — it marks the moments that matter. Used sparingly, it carries authority. Used everywhere, it loses meaning.</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE 5 — COLOR PALETTE
+═══════════════════════════════════════════════════════ -->
+<div class="page content-page">
+  <div class="page-label">02 — Color System</div>
+  <div class="content-h2">Primary — Teal Gradient</div>
+
+  <div class="gradient-hero">
+    <div class="gradient-label">The FieldMarq Gradient</div>
+  </div>
+  <div class="gradient-stops">
+    <span class="gradient-stop">#00C9A7<br>Teal Bright</span>
+    <span class="gradient-stop" style="text-align:center;">#0097A7<br>Teal Mid</span>
+    <span class="gradient-stop" style="text-align:center;">#006073<br>Teal Deep</span>
+    <span class="gradient-stop" style="text-align:right;">#00353F<br>Teal Dark</span>
+  </div>
+
+  <div class="swatch-grid">
+    <div class="swatch">
+      <div class="swatch-color" style="background:#00C9A7;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Teal Bright</div>
+        <div class="swatch-hex">#00C9A7</div>
+        <div class="swatch-use">CTAs · highlights</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#0097A7;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Teal Mid</div>
+        <div class="swatch-hex">#0097A7</div>
+        <div class="swatch-use">Links · focus rings</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#006073;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Teal Deep</div>
+        <div class="swatch-hex">#006073</div>
+        <div class="swatch-use">Hero backgrounds</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#00353F;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Teal Dark</div>
+        <div class="swatch-hex">#00353F</div>
+        <div class="swatch-use">Dark shell · text</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-h3">Neutrals</div>
+  <div class="swatch-grid swatch-grid-5">
+    <div class="swatch">
+      <div class="swatch-color" style="background:#F8FAFB; border-bottom:1px solid #E2EAEC;"></div>
+      <div class="swatch-info"><div class="swatch-name">Gray 50</div><div class="swatch-hex">#F8FAFB</div><div class="swatch-use">Page bg</div></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#F0F4F5; border-bottom:1px solid #E2EAEC;"></div>
+      <div class="swatch-info"><div class="swatch-name">Gray 100</div><div class="swatch-hex">#F0F4F5</div><div class="swatch-use">Card bg</div></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#E2EAEC;"></div>
+      <div class="swatch-info"><div class="swatch-name">Gray 200</div><div class="swatch-hex">#E2EAEC</div><div class="swatch-use">Borders</div></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#4A6670;"></div>
+      <div class="swatch-info"><div class="swatch-name">Gray 600</div><div class="swatch-hex">#4A6670</div><div class="swatch-use">Body text</div></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#0D1F24;"></div>
+      <div class="swatch-info"><div class="swatch-name">Gray 900</div><div class="swatch-hex">#0D1F24</div><div class="swatch-use">Headlines</div></div>
+    </div>
+  </div>
+
+  <div class="do-dont" style="margin-top: 24px;">
+    <div class="do-col">
+      <div class="do-header">✓ Do</div>
+      <div class="do-item"><span class="do-dot">·</span>Teal gradient on primary CTAs only</div>
+      <div class="do-item"><span class="do-dot">·</span>Gray-900 for all headlines</div>
+      <div class="do-item"><span class="do-dot">·</span>Gray-50 for page backgrounds</div>
+      <div class="do-item"><span class="do-dot">·</span>Teal-mid for interactive elements</div>
+    </div>
+    <div class="dont-col">
+      <div class="dont-header">✗ Don't</div>
+      <div class="dont-item"><span class="dont-dot">·</span>Purple — the AI-slop default</div>
+      <div class="dont-item"><span class="dont-dot">·</span>Blue — generic SaaS color</div>
+      <div class="dont-item"><span class="dont-dot">·</span>Gradient on every element</div>
+      <div class="dont-item"><span class="dont-dot">·</span>Pure black (#000) for text</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE 6 — SECTION DIVIDER: TYPOGRAPHY
+═══════════════════════════════════════════════════════ -->
+<div class="page section-divider">
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:flex-end;">
+    <div class="section-number">03</div>
+    <div class="section-title">Typog-<br>raphy</div>
+    <div class="section-intro">Satoshi for all UI — the editorial weight of PP Neue Montreal without the licensing cost. Cabinet Grotesk 800 for display moments. DM Mono for data. Never Inter.</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE 7 — TYPE SPECIMEN
+═══════════════════════════════════════════════════════ -->
+<div class="page content-page">
+  <div class="page-label">03 — Typography</div>
+  <div class="content-h2">Type Scale</div>
+
+  <div class="type-specimen-row">
+    <div class="type-label">5xl · 48px<br>Cabinet 800</div>
+    <div class="type-sample" style="font-family:'Cabinet Grotesk','Satoshi',sans-serif; font-size:42px; font-weight:800; letter-spacing:-2px; color:var(--gray-900); line-height:1;">FieldMarq</div>
+  </div>
+
+  <div class="type-specimen-row">
+    <div class="type-label">4xl · 36px<br>Cabinet 800</div>
+    <div class="type-sample" style="font-family:'Cabinet Grotesk','Satoshi',sans-serif; font-size:30px; font-weight:800; letter-spacing:-1px; color:var(--gray-900);">Event Intelligence</div>
+  </div>
+
+  <div class="type-specimen-row">
+    <div class="type-label">3xl · 30px<br>Satoshi 500</div>
+    <div class="type-sample" style="font-size:24px; font-weight:500; color:var(--gray-900);">Pipeline Attribution</div>
+  </div>
+
+  <div class="type-specimen-row">
+    <div class="type-label">2xl · 24px<br>Satoshi 500</div>
+    <div class="type-sample" style="font-size:20px; font-weight:500; color:var(--gray-900);">Post-Event Summary</div>
+  </div>
+
+  <div class="type-specimen-row">
+    <div class="type-label">xl · 20px<br>Satoshi 500</div>
+    <div class="type-sample" style="font-size:16px; font-weight:500; color:var(--gray-900);">CES 2026 — Executive Dinner</div>
+  </div>
+
+  <div class="type-specimen-row">
+    <div class="type-label">base · 16px<br>Satoshi 400</div>
+    <div class="type-sample" style="font-size:13px; font-weight:400; color:var(--gray-600); line-height:1.6; max-width:360px;">FMs are always context-switching. Every word in the interface must earn its place. Clarity over cleverness, always.</div>
+  </div>
+
+  <div class="type-specimen-row">
+    <div class="type-label">sm · 14px<br>Satoshi 400</div>
+    <div class="type-sample" style="font-size:11px; font-weight:400; color:var(--gray-600);">Sarah Chen · sarah@acme.com · VP of Sales · Acme Corp · $120K pipeline</div>
+  </div>
+
+  <div class="type-specimen-row">
+    <div class="type-label">xs · 12px<br>Satoshi 700</div>
+    <div class="type-sample" style="font-size:10px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--gray-400);">Badge Label · Status Pill · Overdue · Hot Lead</div>
+  </div>
+
+  <div class="type-specimen-row">
+    <div class="type-label">mono<br>DM Mono</div>
+    <div class="type-sample" style="font-family:'Courier New',monospace; font-size:12px; color:var(--teal-deep);">$485,000 · 3.2x ROI · 47 leads · 89% attendance</div>
+  </div>
+
+  <div class="do-dont" style="margin-top:24px;">
+    <div class="do-col">
+      <div class="do-header">✓ Do</div>
+      <div class="do-item"><span class="do-dot">·</span>Satoshi 400 for body — editorial weight</div>
+      <div class="do-item"><span class="do-dot">·</span>Cabinet Grotesk 800 for hero moments</div>
+      <div class="do-item"><span class="do-dot">·</span>DM Mono for all numbers and data</div>
+      <div class="do-item"><span class="do-dot">·</span>Tight letter-spacing on large display type</div>
+    </div>
+    <div class="dont-col">
+      <div class="dont-header">✗ Don't</div>
+      <div class="dont-item"><span class="dont-dot">·</span>Inter — the AI default, instantly generic</div>
+      <div class="dont-item"><span class="dont-dot">·</span>Roboto — Android system font</div>
+      <div class="dont-item"><span class="dont-dot">·</span>Arial — never, under any circumstances</div>
+      <div class="dont-item"><span class="dont-dot">·</span>Space Grotesk — overused in AI tools</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE 8 — COMPONENTS
+═══════════════════════════════════════════════════════ -->
+<div class="page content-page">
+  <div class="page-label">04 — Components</div>
+  <div class="content-h2">Buttons &amp; Cards</div>
+
+  <div class="content-h3">Buttons — Correct Usage</div>
+  <div class="btn-row">
+    <button class="btn-primary">Generate Report</button>
+    <button class="btn-secondary">View Details</button>
+    <button class="btn-ghost">Cancel</button>
+  </div>
+
+  <div class="content-h3">Buttons — Incorrect Usage</div>
+  <div class="btn-row" style="margin-bottom:8px;">
+    <button class="btn-dont">Generate Report</button>
+    <div style="font-size:10px; color:var(--gray-400); font-style:italic; padding: 4px 0;">Purple fill · pill shape · wrong font — never</div>
+  </div>
+
+  <div class="do-dont" style="margin-bottom:24px;">
+    <div class="do-col">
+      <div class="do-header">✓ Do</div>
+      <div class="do-item"><span class="do-dot">·</span>Teal gradient on primary actions</div>
+      <div class="do-item"><span class="do-dot">·</span>Outline teal for secondary</div>
+      <div class="do-item"><span class="do-dot">·</span>8px border radius</div>
+      <div class="do-item"><span class="do-dot">·</span>Satoshi 500, 13px</div>
+    </div>
+    <div class="dont-col">
+      <div class="dont-header">✗ Don't</div>
+      <div class="dont-item"><span class="dont-dot">·</span>Purple or blue fill</div>
+      <div class="dont-item"><span class="dont-dot">·</span>Pill shape on primary actions</div>
+      <div class="dont-item"><span class="dont-dot">·</span>Heavy drop shadows</div>
+      <div class="dont-item"><span class="dont-dot">·</span>All caps button labels</div>
+    </div>
+  </div>
+
+  <div class="content-h3">Cards</div>
+  <div class="card-comparison">
+    <div>
+      <div class="card-tag tag-do">✓ Correct</div>
+      <div class="card-do">
+        <div class="card-title">CES 2026 — Executive Dinner</div>
+        <div class="card-meta">Jan 7–10 · Las Vegas, NV</div>
+        <div style="display:flex; gap:16px; margin-top:8px;">
+          <div>
+            <div class="card-stat">$485K</div>
+            <div class="card-stat-label">Pipeline</div>
+          </div>
+          <div>
+            <div class="card-stat">3.2x</div>
+            <div class="card-stat-label">ROI</div>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <span class="badge badge-success">● Active</span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card-tag tag-dont">✗ Incorrect</div>
+      <div class="card-dont">
+        <div class="card-title">CES 2026 — Executive Dinner</div>
+        <div class="card-meta" style="color:#9333EA;">Jan 7–10 · Las Vegas, NV</div>
+        <div style="display:flex; gap:16px; margin-top:8px;">
+          <div>
+            <div class="card-stat">$485K</div>
+            <div class="card-stat-label">Pipeline</div>
+          </div>
+          <div>
+            <div class="card-stat">3.2x</div>
+            <div class="card-stat-label">ROI</div>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <span class="badge" style="background:#EDE9FE; color:#7C3AED;">● Active</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-h3">Status Badges</div>
+  <div class="badge-row">
+    <span class="badge badge-success">● Active</span>
+    <span class="badge badge-warning">⚠ At Risk</span>
+    <span class="badge badge-error">● Overdue</span>
+    <span class="badge badge-neutral">○ Draft</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE 9 — DARK MODE
+═══════════════════════════════════════════════════════ -->
+<div class="page dark-page">
+  <div class="page-label">05 — Dark Mode</div>
+  <div class="content-h2">Shell &amp; Sidebar Only</div>
+  <div class="body-text">Dark mode applies to the navigation shell only. Content areas — reports, tables, event detail — remain light. FMs read data-heavy content more accurately on a light background.</div>
+
+  <div class="sidebar-demo">
+    <div class="dark-sidebar">
+      <div style="padding: 12px 20px 16px; border-bottom: 1px solid #1E3840; margin-bottom: 8px;">
+        <div style="font-family:'Cabinet Grotesk','Satoshi',sans-serif; font-size:16px; font-weight:800; background:linear-gradient(135deg,#00C9A7,#006073); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;">FieldMarq</div>
+      </div>
+      <div class="dark-nav-item active"><div class="nav-dot"></div> Dashboard</div>
+      <div class="dark-nav-item"><div class="nav-dot"></div> Events</div>
+      <div class="dark-nav-item"><div class="nav-dot"></div> Campaigns</div>
+      <div class="dark-nav-item"><div class="nav-dot"></div> Reports</div>
+      <div class="dark-nav-item"><div class="nav-dot"></div> Contacts</div>
+    </div>
+    <div class="content-demo">
+      <div class="content-demo-row"></div>
+      <div class="content-demo-row"></div>
+      <div class="content-demo-row"></div>
+      <div class="content-demo-row" style="width:90%;"></div>
+      <div class="content-demo-row" style="width:65%;"></div>
+    </div>
+  </div>
+
+  <div class="swatch-grid" style="border-color: #1E3840;">
+    <div class="swatch">
+      <div class="swatch-color" style="background:#0D1F24;"></div>
+      <div class="swatch-info" style="background:#162830; border-top-color:#1E3840;">
+        <div class="swatch-name" style="color:rgba(255,255,255,0.7);">Dark BG</div>
+        <div class="swatch-hex" style="color:#6B9AA4;">#0D1F24</div>
+        <div class="swatch-use" style="color:rgba(255,255,255,0.2);">Shell background</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#162830;"></div>
+      <div class="swatch-info" style="background:#162830; border-top-color:#1E3840;">
+        <div class="swatch-name" style="color:rgba(255,255,255,0.7);">Surface</div>
+        <div class="swatch-hex" style="color:#6B9AA4;">#162830</div>
+        <div class="swatch-use" style="color:rgba(255,255,255,0.2);">Cards/panels</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#E8F4F6;"></div>
+      <div class="swatch-info" style="background:#162830; border-top-color:#1E3840;">
+        <div class="swatch-name" style="color:rgba(255,255,255,0.7);">Dark Text</div>
+        <div class="swatch-hex" style="color:#6B9AA4;">#E8F4F6</div>
+        <div class="swatch-use" style="color:rgba(255,255,255,0.2);">Primary text</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#00C9A7; opacity:0.12; position:relative;">
+        <div style="position:absolute; left:0; top:0; bottom:0; width:4px; background:#00C9A7;"></div>
+      </div>
+      <div class="swatch-info" style="background:#162830; border-top-color:#1E3840;">
+        <div class="swatch-name" style="color:rgba(255,255,255,0.7);">Active Nav</div>
+        <div class="swatch-hex" style="color:#6B9AA4;">rgba(teal,0.1)</div>
+        <div class="swatch-use" style="color:rgba(255,255,255,0.2);">+ teal left border</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE 10 — MOTION + SPACING
+═══════════════════════════════════════════════════════ -->
+<div class="page content-page">
+  <div class="page-label">06 — Motion &amp; Spacing</div>
+  <div class="content-h2">Motion Principles</div>
+
+  <div class="body-text">FieldMarq is a professional tool. Motion must be purposeful — it communicates state change, not personality. Every animation should make the platform feel faster, not more animated.</div>
+
+  <table class="motion-table">
+    <thead>
+      <tr>
+        <th>Interaction</th>
+        <th>Value</th>
+        <th>Purpose</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Hover states</td>
+        <td>0.15s ease</td>
+        <td>Color changes, opacity shifts</td>
+      </tr>
+      <tr>
+        <td>Hover lift</td>
+        <td>translateY(-1px)</td>
+        <td>Cards and primary buttons</td>
+      </tr>
+      <tr>
+        <td>Modal entrance</td>
+        <td>scale(0.97→1) + opacity, 0.2s</td>
+        <td>Modals, drawers, popovers</td>
+      </tr>
+      <tr>
+        <td>Skeleton loader</td>
+        <td>shimmer 1.5s infinite</td>
+        <td>Loading states only</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="do-dont" style="margin-bottom:32px;">
+    <div class="do-col">
+      <div class="do-header">✓ Do</div>
+      <div class="do-item"><span class="do-dot">·</span>0.15s ease on all transitions</div>
+      <div class="do-item"><span class="do-dot">·</span>Reduced motion media query</div>
+      <div class="do-item"><span class="do-dot">·</span>Motion that communicates meaning</div>
+    </div>
+    <div class="dont-col">
+      <div class="dont-header">✗ Don't</div>
+      <div class="dont-item"><span class="dont-dot">·</span>Bounce or spring easings</div>
+      <div class="dont-item"><span class="dont-dot">·</span>Animations over 0.3s on UI</div>
+      <div class="dont-item"><span class="dont-dot">·</span>Motion on every interaction</div>
+    </div>
+  </div>
+
+  <div class="content-h2" style="margin-top:8px;">Spacing System</div>
+  <div class="body-text">8px base unit. Everything is a multiple.</div>
+
+  <div class="spacing-ruler">
+    <div class="spacing-item"><div class="spacing-block" style="width:4px; height:4px;"></div><div class="spacing-label">4</div></div>
+    <div class="spacing-item"><div class="spacing-block" style="width:8px; height:8px;"></div><div class="spacing-label">8</div></div>
+    <div class="spacing-item"><div class="spacing-block" style="width:12px; height:12px;"></div><div class="spacing-label">12</div></div>
+    <div class="spacing-item"><div class="spacing-block active" style="width:16px; height:16px;"></div><div class="spacing-label">16</div></div>
+    <div class="spacing-item"><div class="spacing-block" style="width:24px; height:24px;"></div><div class="spacing-label">24</div></div>
+    <div class="spacing-item"><div class="spacing-block" style="width:32px; height:32px;"></div><div class="spacing-label">32</div></div>
+    <div class="spacing-item"><div class="spacing-block" style="width:48px; height:48px;"></div><div class="spacing-label">48</div></div>
+    <div class="spacing-item"><div class="spacing-block" style="width:64px; height:64px;"></div><div class="spacing-label">64</div></div>
+    <div class="spacing-item"><div class="spacing-block" style="width:96px; height:96px;"></div><div class="spacing-label">96</div></div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE 11 — ANTI-PATTERNS
+═══════════════════════════════════════════════════════ -->
+<div class="page content-page" style="background: #FFFAFA;">
+  <div class="page-label" style="color: var(--red);">07 — What FieldMarq Is Not</div>
+  <div class="content-h2">Anti-Patterns</div>
+  <div class="body-text">These patterns are the statistical center of AI-generated design. Each one signals that no designer was involved. Avoid unconditionally.</div>
+
+  <div class="antipattern-grid">
+    <div class="antipattern-item">
+      <div class="antipattern-name"><span class="x-mark">✗</span> Purple gradient on white</div>
+      <div class="antipattern-why">The signature of every AI-built SaaS tool in 2024–25. Instantly marks FieldMarq as undifferentiated.</div>
+      <div style="height:32px; background:linear-gradient(135deg,#7C3AED,#A855F7); border-radius:4px; margin-top:8px; opacity:0.6;"></div>
+    </div>
+    <div class="antipattern-item">
+      <div class="antipattern-name"><span class="x-mark">✗</span> Inter / Roboto / Arial</div>
+      <div class="antipattern-why">The default fonts of AI-generated interfaces. Using them is opting into mediocrity by default.</div>
+      <div style="font-family:'Arial',sans-serif; font-size:18px; font-weight:700; color:#6B7280; margin-top:8px;">FieldMarq</div>
+    </div>
+    <div class="antipattern-item">
+      <div class="antipattern-name"><span class="x-mark">✗</span> Three-column icon card grid</div>
+      <div class="antipattern-why">Every SaaS landing page. Every AI dashboard. No differentiation. No editorial voice.</div>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-top:8px;">
+        <div style="background:#F3F4F6; border-radius:6px; padding:8px; text-align:center; font-size:18px;">⚡</div>
+        <div style="background:#F3F4F6; border-radius:6px; padding:8px; text-align:center; font-size:18px;">📊</div>
+        <div style="background:#F3F4F6; border-radius:6px; padding:8px; text-align:center; font-size:18px;">🎯</div>
+      </div>
+    </div>
+    <div class="antipattern-item">
+      <div class="antipattern-name"><span class="x-mark">✗</span> Full-app dark mode</div>
+      <div class="antipattern-why">Content areas with tables and reports are harder to read on dark backgrounds. Dark mode is shell-only.</div>
+      <div style="background:#1a1a2e; border-radius:4px; padding:8px; margin-top:8px; font-size:10px; color:rgba(255,255,255,0.3);">Table data is harder to read here →</div>
+    </div>
+    <div class="antipattern-item">
+      <div class="antipattern-name"><span class="x-mark">✗</span> Pill-shaped primary buttons</div>
+      <div class="antipattern-why">Reserve pill shapes for status badges. Primary CTAs use 8px radius — confident, not casual.</div>
+      <button style="background:linear-gradient(135deg,#00C9A7,#0097A7); color:white; border:none; border-radius:999px; padding:8px 20px; font-size:12px; margin-top:8px; font-weight:600;">Generate Report</button>
+    </div>
+    <div class="antipattern-item">
+      <div class="antipattern-name"><span class="x-mark">✗</span> Heavy drop shadows</div>
+      <div class="antipattern-why">Dated. Use whitespace and 1px borders as separation. Shadows should be invisible — felt, not seen.</div>
+      <div style="background:white; border-radius:8px; padding:12px; margin-top:8px; box-shadow:0 20px 40px rgba(0,0,0,0.25); font-size:10px; color:var(--gray-600);">Card with heavy shadow</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE 12 — BACK COVER
+═══════════════════════════════════════════════════════ -->
+<div class="page back-cover">
+  <div>
+    <div class="back-large-text">Field<br>Marq</div>
+    <div class="back-tagline">The field marketing platform that turns events into pipeline — and pipeline into proof. Built for FMs who run on instinct and need data to back it up.</div>
+
+    <!-- Logo mark large -->
+    <svg width="80" height="80" viewBox="0 0 64 64" fill="none">
+      <defs>
+        <linearGradient id="bcGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#00C9A7"/>
+          <stop offset="50%" stop-color="#0097A7"/>
+          <stop offset="100%" stop-color="#006073"/>
+        </linearGradient>
+      </defs>
+      <rect width="64" height="64" rx="12" fill="url(#bcGrad)"/>
+      <text x="32" y="44" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="28" fill="white">FM</text>
+    </svg>
+  </div>
+
+  <div>
+    <div style="height:1px; background:rgba(255,255,255,0.08); margin-bottom:24px;"></div>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <div class="back-url">fieldmarq.io</div>
+      <div class="cover-meta">Brand Guidelines V1.0 · March 2026 · Internal</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
