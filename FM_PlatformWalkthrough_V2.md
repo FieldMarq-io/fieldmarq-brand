@@ -2,7 +2,7 @@
 
 **Complete Step-by-Step Walkthrough: Every Screen, Every Click, Every Feature**
 
-Version 2.0 | March 25, 2026
+Version 2.1 | March 25, 2026
 
 *Living Document: Updated as features ship*
 
@@ -35,8 +35,8 @@ Version 2.0 | March 25, 2026
    - 6.4 Checklist Reconciliation (Event Type Change)
    - 6.5 Bulk Event Import
    - 6.6 Event Detail: Overview Tab
-   - 6.7 Event Detail: Tasks Tab
-   - 6.8 Event Detail: People/Guests Tab
+   - 6.7 Event Detail: Tasks Tab (with Dependencies)
+   - 6.8 Event Detail: People/Guests Tab (with RSVP Workflow)
    - 6.9 Event Detail: Outreach/Campaigns Tab
    - 6.10 Event Detail: Budget Tab
    - 6.11 Event Detail: Documents Tab
@@ -56,8 +56,14 @@ Version 2.0 | March 25, 2026
     - 10.3 AI Email Generation
     - 10.4 Dynamic Segment Builder
     - 10.5 Email Review Panel
-    - 10.6 Email Scheduling and Sending
-    - 10.7 Campaign Clone
+    - 10.6 Email Review Queue (3-Panel Layout)
+    - 10.7 Email Scheduling and Sending
+    - 10.8 Campaign Clone
+    - 10.9 Campaign Pause/Resume
+    - 10.10 Send Confirmation Modal
+    - 10.11 CAN-SPAM Unsubscribe Compliance
+    - 10.12 Email Sequences (Multi-Step Campaigns)
+    - 10.13 Re-engagement Worker (Automated)
 11. Phase 8: Reports and Intelligence
     - 11.1 Reports Hub
     - 11.2 Report View (Individual Reports)
@@ -80,13 +86,14 @@ Version 2.0 | March 25, 2026
     - 14.4 Team Management (Not Built)
     - 14.5 Billing / Stripe (Not Built)
     - 14.6 Data Export and Account Management (Not Built)
-15. Notification System
+15. Notification System (with Notification Banner)
 16. Platform Architecture (Why We Built It This Way)
 17. Copilot Roadmap (V2 Vision)
 
 Appendix A: Build Status Summary
 Appendix B: Backend API Endpoint Reference
 Appendix C: Database Migration Index (001-026)
+Appendix D: Jack's Main Branch Features (Post-Divergence)
 
 ---
 
@@ -121,19 +128,23 @@ The core insight: a field marketer's intelligence, built up over years of runnin
 
 ## 3. Build Timeline (Batch 1 + Batch 2)
 
-All work lives on the `Aubs-updates` branch, awaiting merge to `main` via Jack.
+Work is split across two branches that need to converge.
 
-### Batch 1 — Committed March 14-22, 2026 (8 PR groups, 63 files)
+### Jack's Main Branch (Ongoing)
 
-Core platform infrastructure: prospectus upload + document handler, checklist system with milestone tasks, bug fixes + checklist reconciliation, dashboard endpoints (action queue, leads-by-status, campaign counts), campaigns (clone, content library, dynamic segments, email review), AI-generated CMO report, scheduler improvements (auto-resolve, phase grouping), and frontend hook/routing fixes.
+While Aubs-updates was in progress, Jack continued building on `main`. 13 commits added after the branch divergence point, including: email sequences (multi-step campaigns), email review queue (3-panel layout), CAN-SPAM unsubscribe compliance, AI document generators (exec briefing, sales brief), notification banner, 19 new event operational fields, task dependencies, RSVP workflow, re-engagement worker, campaign pause/resume, onboarding route guard, and send confirmation modal. These features are **live on main** and need to be reconciled when Aubs-updates merges.
 
-### Batch 2 — Committed March 22-25, 2026 (~94 files across 7 groups)
+### Aubs Batch 1 — Committed March 14-22, 2026 (8 PR groups, 63 files)
 
-Design system brand refresh (37 files), events and import components (12 files), all 8 event detail tabs refreshed, campaigns design refresh (7 files), dashboard overhaul with drag-and-drop (1 file, ~980 lines), new page shells for scoring/pipeline/attribution, and the full report engine (25 files — backend handler, 5 migrations, 23 frontend widgets).
+On `Aubs-updates` branch, awaiting merge to `main` via Jack. Core platform infrastructure: prospectus upload + document handler, checklist system with milestone tasks, bug fixes + checklist reconciliation, dashboard endpoints (action queue, leads-by-status, campaign counts), campaigns (clone, content library, dynamic segments, email review), AI-generated CMO report, scheduler improvements (auto-resolve, phase grouping), and frontend hook/routing fixes.
+
+### Aubs Batch 2 — Committed March 22-25, 2026 (~94 files across 7 groups)
+
+On `Aubs-updates` branch. Design system brand refresh (37 files), events and import components (12 files), all 8 event detail tabs refreshed, campaigns design refresh (7 files), dashboard overhaul with drag-and-drop (1 file, ~980 lines), new page shells for scoring/pipeline/attribution, and the full report engine (25 files — backend handler, 5 migrations, 23 frontend widgets).
 
 ### Merge Order
 
-Batch 1 merges first (8 groups in dependency order). Batch 2 merges after all of Batch 1 is on main (7 groups, design system first, report engine last). Full merge instructions in `docs/MERGE_ORDER.md`.
+Batch 1 merges first (8 groups in dependency order). Batch 2 merges after all of Batch 1 is on main (7 groups, design system first, report engine last). Full merge instructions in `docs/MERGE_ORDER.md`. Jack's main branch features will need conflict resolution during merge — particularly in campaigns.go, tasks.go, events.go, scheduler.go, DocumentsTab.tsx, TasksTab.tsx, and PeopleTab.tsx.
 
 ---
 
@@ -173,6 +184,7 @@ This is a 4-step wizard at `/setup`: Company, Audience, Voice, and Done.
 | Website URL analysis (Claude API) | SHIPPED | Async job polling, shows extracted results (description, differentiators, competitors, personas, topics) |
 | company_profiles JSONB storage | SHIPPED | Schema exists with icp_data, competitors, products, messaging, personas columns |
 | Onboarding backend persistence | SHIPPED | POST/GET/PUT /api/v1/onboarding/profile endpoints wired |
+| Onboarding route guard | SHIPPED (main) | AppShell checks onboarding_completed flag, redirects to /setup if incomplete |
 | Confidence-scored field review | NOT BUILT | No green/amber/red indicators on AI-extracted fields yet |
 | Content library auto-seeding | NOT BUILT | No auto-generation of initial email templates from scraped data |
 | Completeness score / progress bar | NOT BUILT | No visual indicator of profile completeness |
@@ -384,28 +396,43 @@ For FMs who manage events in spreadsheets. The BulkEventImportModal accepts CSV/
 
 URL: `/events/:id`. Page header shows event name, date range, days-until countdown, budget, and status. Below: 8 tabs (Overview, Tasks, People, Outreach, Budget, Documents, Content, Results).
 
-Overview shows: RSVP/guest count, Budget Overview bar (allocated vs. spent with percentage), Task Progress bar (complete vs. total), Quick Actions row, and Event Details card (date, time, venue, address, capacity, event type — each editable).
+Overview shows: RSVP/guest count with breakdown (confirmed/registered/declined/waitlisted), Budget Overview bar (allocated vs. spent with percentage), Task Progress bar (complete vs. total), Quick Actions row (lifecycle-aware — different buttons for planning/pre-event/day-of/post-event phases), Event Details card with 19 operational fields (date, time, venue, address, capacity, event type, tier, business objective, booth size — each editable), and an Event Health Indicator.
+
+**Event Health Indicator** — Color-coded status (green/amber/red/grey) with a smart summary line that changes based on lifecycle phase. Pre-event: "X tasks overdue." Day-of: "Y guests not yet confirmed." Post-event: "Z follow-ups pending." This gives the FM instant situational awareness without scanning every tab.
+
+> **Why 19 Operational Fields**
+>
+> An FM needs to know parking details, WiFi password, venue contact phone, catering style, dress code, and lead retrieval method. These aren't "nice to have" — they're what gets asked at 7am on event day. Having them in the platform means the KBYG generator and Operations Guide report can pull them automatically instead of the FM writing them from memory.
 
 | Feature | Status | What the FM Experiences |
 |---------|--------|------------------------|
 | Event header with countdown | SHIPPED | Name, dates, days-until, budget, status |
 | Budget Overview bar | SHIPPED | Allocated vs. spent with percentage |
 | Task Progress bar | SHIPPED | Complete/total with percentage |
-| Event Details card (editable) | SHIPPED | Core fields shown and editable |
-| Quick Actions row | PARTIAL | Generate Campaign, Upload Invoice, Add Guest. Missing: Generate KBYG, Send Reminder |
+| Event Details card (editable) | SHIPPED | Core fields + 19 operational fields (tier, objective, venue details, catering, dress code, booth size, etc.) |
+| 19 operational fields (migration 011) | SHIPPED (main) | Event tier, business objective, target ICP, internal code, venue address/contact/room/capacity/setup/parking/wifi, catering style, dress code, booth size, organizer contact, lead retrieval method |
+| Quick Actions row (lifecycle-aware) | SHIPPED (main) | Different action buttons based on event phase (planning/pre-event/day-of/post-event) |
+| Event Health Indicator | SHIPPED (main) | Green/amber/red/grey status with smart summary line |
+| RSVP KPI breakdown | SHIPPED (main) | Confirmed/registered/declined/waitlisted counts on Overview |
 | Event Timeline with milestones | SHIPPED | Milestone markers render |
 
-### 6.7 Event Detail: Tasks Tab
+### 6.7 Event Detail: Tasks Tab (with Dependencies)
 
-The Tasks tab is where operational rigor lives. Tasks are grouped by **milestone phase** (Planning, Pre-Event, Day-Of, Post-Event) with progress bars per phase. Each task shows: name, due date, milestone badge, completion status. Overdue tasks appear in red with a days-overdue counter.
+The Tasks tab is where operational rigor lives. Tasks are grouped by **milestone phase** (Planning, Pre-Event, Day-Of, Post-Event) with progress bars per phase. Each task shows: name, due date, milestone badge, completion status, and dependency indicators. Overdue tasks appear in red with a days-overdue counter.
 
-The FM can: mark tasks done with a single click, add custom tasks, edit task details in a side panel (status, notes with auto-timestamp, Ctrl+S to save), and navigate tasks with keyboard shortcuts (arrow keys, Esc to close panel).
+The FM can: mark tasks done with a single click, add custom tasks, edit task details in a side panel (status, notes with auto-timestamp, Ctrl+S to save), navigate tasks with keyboard shortcuts (arrow keys, Esc to close panel), and **set task dependencies** (blocking relationships between tasks).
+
+**Task Dependencies** (migration 012 on main): Tasks can depend on other tasks within the same event. The task edit modal shows a "Dependencies" section — current dependencies as removable amber pills, and a dropdown to add new dependencies. Blocked tasks show a visual indicator (disabled checkbox, grayed text). When a dependency is marked complete, unblock notifications fire. The system prevents self-dependencies and cycles via recursive CTE validation.
 
 **Auto-resolution:** Pre-event and day-of tasks auto-mark complete when the event date passes. Post-event tasks auto-resolve 14 days after the event ends. Resolved tasks show `resolved_reason='assumed_complete'`.
 
 > **Design Decision: Task Title Customization**
 >
 > The FM renames the display title freely (e.g., "Book venue" becomes "Reserve private dining room at The Guild"). The `platform_task_id` foreign key preserves the link to the canonical template task for analytics. In V2, Claude silently re-classifies renamed tasks and only interrupts when confidence is low.
+
+> **Why Task Dependencies Matter**
+>
+> "Ship swag" can't happen until "Finalize swag design" is done. Without dependencies, an FM has to mentally track these chains across 50+ tasks. With dependencies, the platform grays out blocked tasks and auto-notifies when a blocker clears. This is the foundation for critical path analysis in V2.
 
 | Feature | Status | What the FM Experiences |
 |---------|--------|------------------------|
@@ -416,12 +443,14 @@ The FM can: mark tasks done with a single click, add custom tasks, edit task det
 | Auto-resolution (pre-event/day-of) | SHIPPED | Scheduler auto-resolves when event date passes |
 | Auto-resolution (post-event, 14d) | SHIPPED | Post-event tasks resolve 14 days after event |
 | Custom task addition | SHIPPED | Add task button with milestone assignment |
-| Task dependencies (blocking) | NOT BUILT | No blocking relationships between tasks |
+| Task dependencies (blocking) | SHIPPED (main) | Add/remove dependencies in task modal, cycle prevention, blocked visual indicator, unblock notifications |
 | Per-task owner assignment | NOT BUILT | All tasks owned by event creator |
 
-### 6.8 Event Detail: People/Guests Tab
+### 6.8 Event Detail: People/Guests Tab (with RSVP Workflow)
 
-Manages everyone associated with an event. Top actions: Add Guests, Upload CSV. The guest table shows: Name, Email, Organization, Title, engagement signals (booth visit, demo requested, session attended, badge scanned), Score with color-coded indicator, and Lead Tag badge (hot/warm/cold/priority/dne).
+Manages everyone associated with an event. Top actions: Add Guests, Upload CSV. The guest table shows: Name, Email, Organization, Title, engagement signals (booth visit, demo requested, session attended, badge scanned), Score with color-coded indicator, Lead Tag badge (hot/warm/cold/priority/dne), and **RSVP status**.
+
+**RSVP Workflow** (on main): 7 statuses — invited, registered, confirmed, declined, waitlisted, cancelled, no_show. Per-guest dropdown in the table to change status. Status filter to view guests by RSVP state. Overview tab KPI breakdown shows confirmed/registered/declined/waitlisted counts.
 
 Clicking a guest row opens the **Lead Detail Drawer** (see Section 9.4) — a full side panel with score breakdown, notes, AE notes, engagement signals, disposition controls, and Save & Next navigation.
 
@@ -430,8 +459,9 @@ Clicking a guest row opens the **Lead Detail Drawer** (see Section 9.4) — a fu
 | Guest list table with scores | SHIPPED | Names, titles, scores, engagement signals, lead tags |
 | CSV upload for guests | SHIPPED | Drag-and-drop CSV upload on the tab |
 | Lead Detail Drawer on row click | SHIPPED | Full side panel (see Section 9.4) |
-| Guest search and filters | PARTIAL | Basic search. Filter by lead tag works. Missing: filter by RSVP status, score tier |
-| RSVP lifecycle management | NOT BUILT | No per-guest RSVP workflow or status transitions |
+| Guest search and filters | PARTIAL | Basic search. Filter by lead tag works. RSVP status filter on main |
+| RSVP lifecycle (7 statuses) | SHIPPED (main) | invited, registered, confirmed, declined, waitlisted, cancelled, no_show — per-guest dropdown |
+| RSVP status filter | SHIPPED (main) | Filter guest list by RSVP status |
 | AI talking points per guest | NOT BUILT | No AI conversation starters from CRM + event context |
 | Import from CRM | NOT BUILT | No CRM contact import with search/filter |
 
@@ -458,15 +488,30 @@ Tracks every dollar. Budget bar (allocated vs. spent with percentage) and a tabl
 
 ### 6.11 Event Detail: Documents Tab
 
-Upload and manage event documents. Supports prospectus upload with AI extraction — Claude extracts structured data from uploaded prospectus PDFs (booth details, pricing, deadlines, audience demographics).
+Upload and manage event documents. Supports prospectus upload with AI extraction, and **three AI-generated document types** that pull from event data, guest intelligence, CRM context, and company profile.
+
+**AI Document Generators** (on main):
+
+1. **Know Before You Go (KBYG)** — Generates a guide for staff attending the event. Pulls event details, venue info, guest list, and operational fields to create a minute-by-minute timeline with vendor contacts, dietary notes, and logistics.
+
+2. **Executive Briefing** — AI-generated intelligence document for attending execs. Sections: Executive Summary, Key Attendees to Meet (grouped by org), Account Intelligence (matching attendees to pipeline opportunities), Talking Points, Meeting Priorities (top 5 suggested 1:1s with reasoning), and Logistics Quick Reference. Pulls from confirmed/registered guests + top 20 CRM opportunities.
+
+3. **Sales Team Brief** — Per-AE briefing with color-coded lead cards. Hot leads (score ≥70) get individual cards with name, title, company, engagement signal, and suggested follow-up. Warm leads (40-69) get grouped summary. Cold leads (<40) get count with nurture recommendation. Includes "Suggested Next Steps" section with specific 48-hour action items.
+
+All three use the 202 Accepted async pattern (job polling) and are accessible via "Generate" buttons on the Documents tab.
+
+> **Why Auto-Generated Event Documents**
+>
+> An FM spends 2-4 hours before every event writing a KBYG guide and briefing deck. With 40+ events per year, that's 80-160 hours of document creation. The AI generators produce these in seconds from data that already exists in the platform. The executive briefing is particularly valuable — it cross-references attendees against CRM pipeline to surface which conversations matter most.
 
 | Feature | Status | What the FM Experiences |
 |---------|--------|------------------------|
 | Document upload/list/delete | SHIPPED | Full CRUD for event documents |
 | Prospectus upload (ProspectusUploadV2) | SHIPPED | Dedicated prospectus upload component |
 | AI prospectus extraction | PARTIAL | Schema exists (event_prospectus_extractions). Claude extraction endpoint exists. Not fully wired to frontend display |
-| KBYG auto-generation | PARTIAL | Backend handler exists (documents.go KBYGHandler). Not wired to frontend button |
-| Executive Briefing auto-gen | NOT BUILT | Template specified, not implemented as standalone doc |
+| KBYG auto-generation | SHIPPED (main) | Generate button on Documents tab, AI-generated guide with job polling |
+| Executive Briefing auto-generation | SHIPPED (main) | AI-generated attendee intelligence + account analysis + meeting priorities |
+| Sales Team Brief auto-generation | SHIPPED (main) | Color-coded lead cards (hot/warm/cold) with follow-up suggestions |
 
 ### 6.12 Event Detail: Content Tab
 
@@ -734,7 +779,33 @@ The FM can: edit subject and body HTML (contenteditable), approve, skip, or send
 | Progress bar (approved vs pending) | SHIPPED | Visual progress through email list |
 | Keyboard shortcuts | SHIPPED | Rapid navigation |
 
-### 10.6 Email Scheduling and Sending
+### 10.6 Email Review Queue — 3-Panel Layout
+
+A more advanced review interface built on main. Full-screen overlay with three panels:
+
+- **Left panel** — Contact navigator with search + filter buttons (All, Pending, Approved, Rejected, Skipped)
+- **Center panel** — Email preview with desktop/mobile toggle, subject + recipient info
+- **Right panel** — Contact context showing title, company, lead_score, event_history, AE_notes
+
+Per-email actions: Approve (green checkmark), Reject (red X with reason input), Skip, and Regenerate (opens RegenerateModal). **"Approve All"** bulk action when pending count > 0. Completion state shows green "Review Complete" with "Ready to Send" button. Auto-navigates to next pending email after each action. Previously-reviewed emails can have their decisions changed.
+
+Review statuses tracked in DB (migration 010): pending_review, approved, rejected, skipped. SendCampaign now automatically excludes rejected/skipped emails.
+
+> **Why Two Review Interfaces**
+>
+> The Email Review Panel (10.5, Aubs-updates) is a lightweight inline review. The Review Queue (10.6, main) is a full-screen dedicated workflow with contact context. They serve different use cases: quick review of 10 emails vs. thorough review of 300 emails with AE context for each. Both will coexist after merge.
+
+| Feature | Status | What the FM Experiences |
+|---------|--------|------------------------|
+| 3-panel review queue | SHIPPED (main) | Full-screen overlay with contact navigator, email preview, contact context |
+| Desktop/mobile preview toggle | SHIPPED (main) | Switch between desktop and mobile email rendering |
+| Approve/Reject/Skip per email | SHIPPED (main) | Individual review with reject reason input |
+| Approve All bulk action | SHIPPED (main) | One-click approve all pending emails |
+| Review completion state | SHIPPED (main) | Green "Review Complete" + "Ready to Send" button |
+| Change previous decisions | SHIPPED (main) | Re-review already-decided emails |
+| Review status in DB (migration 010) | SHIPPED (main) | pending_review, approved, rejected, skipped with reject_reason |
+
+### 10.7 Email Scheduling and Sending
 
 Emails sent through SendGrid. Timezone-aware scheduler (schedule_handler.go) handles scheduling with ParseAndValidate, Upsert, Cancel, and GetSchedule operations. The CampaignDetailModal shows schedule status bar when a send is pending.
 
@@ -743,15 +814,88 @@ Emails sent through SendGrid. Timezone-aware scheduler (schedule_handler.go) han
 | SendGrid send | SHIPPED | Email delivery via SendGrid |
 | Timezone-aware scheduling | SHIPPED | Schedule with timezone, cancel, reschedule |
 | Webhook tracking (delivery/open/click) | PARTIAL | SendGrid webhook endpoint exists. Tracking back to campaign_emails partially wired |
-| Unsubscribe handling | NOT BUILT | **COMPLIANCE RISK** — No suppression list, no unsubscribe link, no CAN-SPAM footer. Must be built before real sends. |
 
-### 10.7 Campaign Clone
+### 10.8 Campaign Clone
 
 Clone any existing campaign to create a new one with the same settings, segment, and AI brief. Available from the campaign detail modal.
 
 | Feature | Status | What the FM Experiences |
 |---------|--------|------------------------|
 | Campaign clone | SHIPPED | One-click clone from detail modal |
+
+### 10.9 Campaign Pause/Resume
+
+Scheduled campaigns can be paused and resumed. Pause button appears on scheduled campaigns (not drafts). Resume returns the campaign to its previous state. If the campaign is part of a sequence, pausing cascades to the parent sequence.
+
+| Feature | Status | What the FM Experiences |
+|---------|--------|------------------------|
+| Pause campaign | SHIPPED (main) | Pause button on scheduled campaigns |
+| Resume campaign | SHIPPED (main) | Resume returns to previous state |
+| Sequence cascade | SHIPPED (main) | Pausing a sequence step pauses the parent sequence |
+
+### 10.10 Send Confirmation Modal
+
+Before sending, a confirmation modal replaces the browser's window.confirm with a proper UI. Shows: send summary (approved/rejected/skipped counts), "Send Now" vs "Schedule" toggle, timezone picker for scheduled sends, tracking checkboxes (track opens/clicks), and an optimal send time tip.
+
+| Feature | Status | What the FM Experiences |
+|---------|--------|------------------------|
+| Send confirmation modal | SHIPPED (main) | Rich confirmation UI with summary counts, schedule toggle, timezone picker |
+
+### 10.11 CAN-SPAM Unsubscribe Compliance
+
+Every outgoing email now includes an unsubscribe footer injected automatically before send. The `injectUnsubscribeFooter()` function adds an unsubscribe link and company mailing address to both SendCampaign and SendSingleEmail paths. Contacts with `email_consent = false` are automatically excluded from all sends.
+
+> **Why This Was a Legal Blocker**
+>
+> Without CAN-SPAM compliance, FieldMarq could not legally send marketing emails. This was flagged as a compliance risk in V1 and is now resolved. Every email includes an unsubscribe mechanism and physical mailing address as required by federal law.
+
+| Feature | Status | What the FM Experiences |
+|---------|--------|------------------------|
+| Unsubscribe footer injection | SHIPPED (main) | Automatic on all campaign emails |
+| Email consent check | SHIPPED (main) | Contacts with consent=false excluded from sends |
+| Company mailing address in footer | SHIPPED (main) | Configurable per company |
+
+### 10.12 Email Sequences (Multi-Step Campaigns)
+
+Sequences are multi-step email campaigns — invite → reminder → KBYG → thank you — where each step triggers automatically based on configurable delays. This was the most requested feature from the "NOT BUILT" list.
+
+**How it works:** The FM creates a sequence, adds steps (each step is a campaign with a delay in days and content focus), and enrolls contacts. The **Sequence Worker** (background job running every 5 minutes) checks for due enrollments and advances them to `pending_review` status — the FM must approve each batch before emails generate. This preserves the human-in-the-loop principle while automating the timing.
+
+**Database:** Migration 009 adds `sequences`, `sequence_enrollments`, and `sequence_events` tables. The `campaigns` table is extended with `sequence_id`, `step_order`, `delay_days`, `step_status`, `content_focus`, and `content_item_ids`.
+
+**Frontend:** Sequences page with CreateSequenceModal, SequenceDetail (shows steps with status pills, enrollments table, audit trail), and AddStepModal.
+
+> **Why Sequences Are "Pending Review" Not "Auto-Send"**
+>
+> An FM needs to see what's going out before it goes out. Auto-sending 300 emails without review is a career risk. The sequence worker advances steps to "pending review" and notifies the FM — they approve, review emails, then send. This matches the copilot-first design: the system does the work, the human confirms.
+
+| Feature | Status | What the FM Experiences |
+|---------|--------|------------------------|
+| Sequence CRUD | SHIPPED (main) | Create, view, edit, delete multi-step sequences |
+| Add/update/remove steps | SHIPPED (main) | Each step has delay_days, content_focus, campaign_type |
+| Enroll contacts | SHIPPED (main) | Idempotent enrollment with status tracking |
+| Sequence worker (5-min ticker) | SHIPPED (main) | Auto-advances due steps to pending_review |
+| Pause/resume individual enrollments | SHIPPED (main) | Per-contact enrollment control |
+| Sequence audit trail | SHIPPED (main) | Immutable event log (sequence_events table) |
+| "sequence_step_ready" notification | SHIPPED (main) | FM notified when a step is due for review |
+
+### 10.13 Re-engagement Worker (Automated)
+
+A background worker (runs daily) that automatically creates draft re-engagement campaigns for stale post-event contacts. Fires when: an event ended 30+ days ago, had at least one sent campaign, has 3+ disengaged contacts (zero opens on any email), and doesn't already have a re-engagement campaign.
+
+The worker auto-creates a draft campaign with a pre-filled AI prompt: low-pressure, acknowledge the time gap, provide new value, soft CTA. The FM reviews and sends (or deletes) — the worker never sends automatically.
+
+Broadcasts a "reengagement_created" notification so the FM knows a draft is waiting.
+
+> **Why Auto-Create Drafts, Not Auto-Send**
+>
+> Re-engagement is a judgment call. Some events don't warrant follow-up (one-off happy hours). The worker surfaces the opportunity and writes the brief — the FM decides whether to act. This is the copilot pattern: platform proposes, human disposes.
+
+| Feature | Status | What the FM Experiences |
+|---------|--------|------------------------|
+| Re-engagement worker (daily) | SHIPPED (main) | Auto-creates draft campaigns for stale post-event contacts |
+| Pre-filled AI prompt | SHIPPED (main) | Low-pressure re-engagement brief ready for review |
+| "reengagement_created" notification | SHIPPED (main) | FM notified when draft is available |
 
 ---
 
@@ -977,9 +1121,9 @@ Salesforce and HubSpot cards, each with connect/disconnect button and status ind
 
 ---
 
-## 15. Notification System
+## 15. Notification System (with Notification Banner)
 
-FieldMarq communicates through three channels. Only Slack is fully shipped.
+FieldMarq communicates through three channels: Slack (fully shipped), in-app notification banner (shipped on main), and email digest (not started).
 
 **Scheduler** (runs every 6 hours):
 1. Task deadline notifications — tasks due within 3 days
@@ -987,12 +1131,24 @@ FieldMarq communicates through three channels. Only Slack is fully shipped.
 3. Auto-resolve past-event tasks — pre-event/day-of when event passes, post-event 14 days after
 4. Hot lead follow-up alerts — leads not contacted in 72+ hours
 5. Lead score decay alert — hot/warm leads untouched 30+ days (fires if 5+ affected)
+6. Review deadline checker — campaigns scheduled within 24 hours with unreviewed emails (on main)
+
+**Notification Banner** (on main): A persistent banner at the top of the app (between Header and main content) that shows the most urgent unread notification. Five notification types with color-coded backgrounds:
+- `review_deadline` (amber) — emails need review before scheduled send
+- `send_failure` (red) — campaign send failed
+- `sequence_step_ready` (blue) — sequence step due for review
+- `reengagement_created` (teal) — auto-generated draft ready
+- `engagement_anomaly` (amber) — unusual engagement pattern
+
+Each banner is clickable (navigates to the relevant entity) and dismissible (marks as read). Only one banner shows at a time — the most urgent.
 
 | Feature | Status | What the FM Experiences |
 |---------|--------|------------------------|
 | Slack notifications (5 triggers) | SHIPPED | Fire-and-forget with rate limiting |
 | Scheduler (6-hour cycle, 5 jobs) | SHIPPED | Task deadlines, stagnation, auto-resolve, hot lead decay, score decay |
-| In-app notification bell | NOT BUILT | Bell icon in nav. No notification backend or dropdown |
+| Notification banner (5 types) | SHIPPED (main) | Persistent top-of-app banner, color-coded, clickable, dismissible |
+| Review deadline checker | SHIPPED (main) | Scheduler alerts when emails unreviewed <24h before scheduled send |
+| In-app notification bell/dropdown | NOT BUILT | Bell icon in nav. No dropdown panel for browsing all notifications |
 | Email digest (weekly summary) | NOT BUILT | No cron job, template, or opt-in flow |
 
 ---
@@ -1057,47 +1213,62 @@ Every V1 design decision in this document was evaluated against this V2 vision. 
 
 ## Appendix A: Build Status Summary
 
-High-level status across all major platform areas as of March 25, 2026.
+High-level status across all major platform areas as of March 25, 2026. Features marked **(main)** are on Jack's main branch. Features without a branch note are on Aubs-updates. Both must merge for the complete platform.
 
-| Area | Status | Summary |
-|------|--------|---------|
-| Onboarding Wizard (4-step) | SHIPPED | All steps, AI website analysis, backend persistence |
-| Events CRUD | SHIPPED | Create, read, update, soft-delete with filters, search, sort |
-| Event Detail (8 tabs) | SHIPPED | All 8 tabs built with real API data |
-| Checklist Templates (14 types) | SHIPPED | 350+ tasks, 85+ milestones, backward offsets, save as template |
-| Checklist Reconciliation | SHIPPED | Keep/remove/add preview on event type change |
-| Bulk Event Import | SHIPPED | CSV/Excel upload, preview, batch execute |
-| Global Tasks Page | SHIPPED | Cross-event view, phase grouping, overdue highlighting, detail panel |
-| Calendar (week + month views) | SHIPPED | 5 item types, day detail, calendar copilot |
-| Dashboard (7 widgets + KPIs) | SHIPPED | Drag-drop, resize, customizable KPIs, all real data |
-| Action Queue (AI-powered) | SHIPPED | Claude-generated priority recommendations |
-| CSV Upload Pipeline | SHIPPED | Upload, parse, score, tag, link attendees |
-| Lead Scoring Engine V2 | SHIPPED | Standalone engine, configurable weights, ICP templates |
-| Score Breakdown UI | SHIPPED | Signal-by-signal panel with 6 categories |
-| Lead Detail Drawer | SHIPPED | Full panel with score, notes, disposition, keyboard nav |
-| Attribution Engine (3-phase) | SHIPPED | Email + domain + fuzzy matching, sourced/influenced |
-| Report Engine (18 types) | SHIPPED | 11 event-level + 7 cross-event, Claude-generated, snapshot caching |
-| Executive Reports Dashboard | SHIPPED | Multi-report inline expansion, per-event filtering |
-| Campaign Builder + AI Email Gen | SHIPPED | Personalized emails from 4 context layers |
-| Dynamic Segment Builder | SHIPPED | Rule-based segments with preview |
-| Email Review Panel | SHIPPED | Per-email review, edit, approve, test send |
-| Campaign Clone | SHIPPED | One-click clone from detail modal |
-| Timezone-Aware Scheduler | SHIPPED | Full schedule handler with email_schedule_queue |
-| Content Library CRUD | SHIPPED | Full metadata tagging, AI integration |
-| Excel Exports (3 types) | SHIPPED | Leads, attribution, campaigns as streaming .xlsx |
-| CRM Connection (Merge.dev) | SHIPPED | Salesforce/HubSpot OAuth, sync, disconnect |
-| Slack Notifications (5 triggers) | SHIPPED | Fire-and-forget with rate limiting |
-| Scheduler (5 automated jobs) | SHIPPED | Task deadlines, stagnation, auto-resolve, lead decay |
-| Contacts (CRUD + dedup) | SHIPPED | Full CRUD, search, filter, find duplicates |
-| Settings (CRM + Slack) | SHIPPED | OAuth connections, webhook management |
-| Scoring/Pipeline/Attribution pages | SHELL | Intentional placeholders for future UI |
-| Budgets/Vendors pages | SHELL | Intentional placeholders for future features |
-| In-App Notifications | NOT BUILT | Bell icon present. No backend |
-| CRM Push (write-back) | NOT BUILT | Must ship for beta |
-| Team Management | NOT BUILT | No invite flow or role assignment |
-| Stripe Billing | NOT BUILT | Blocked on dependency approval |
-| Full Data Export | NOT BUILT | Specified but no implementation |
-| Unsubscribe / CAN-SPAM | NOT BUILT | **Compliance risk** — must ship before real sends |
+| Area | Status | Branch | Summary |
+|------|--------|--------|---------|
+| Onboarding Wizard (4-step) | SHIPPED | Aubs | All steps, AI website analysis, backend persistence |
+| Onboarding Route Guard | SHIPPED | main | Redirects to /setup if onboarding incomplete |
+| Events CRUD | SHIPPED | both | Create, read, update, soft-delete with filters, search, sort |
+| Event Detail (8 tabs) | SHIPPED | both | All 8 tabs built with real API data |
+| Event Operational Fields (19 new) | SHIPPED | main | Tier, objective, venue details, parking, wifi, catering, dress code, booth size, etc. |
+| Event Health Indicator | SHIPPED | main | Green/amber/red status with lifecycle-aware smart summary |
+| Checklist Templates (14 types) | SHIPPED | Aubs | 350+ tasks, 85+ milestones, backward offsets, save as template |
+| Checklist Reconciliation | SHIPPED | Aubs | Keep/remove/add preview on event type change |
+| Task Dependencies | SHIPPED | main | Blocking relationships, cycle prevention, unblock notifications |
+| RSVP Workflow (7 statuses) | SHIPPED | main | invited → registered → confirmed → attended (and declined/waitlisted/no-show) |
+| Bulk Event Import | SHIPPED | both | CSV/Excel upload, preview, batch execute |
+| Global Tasks Page | SHIPPED | Aubs | Cross-event view, phase grouping, overdue highlighting, detail panel |
+| Calendar (week + month views) | SHIPPED | Aubs | 5 item types, day detail, calendar copilot |
+| Dashboard (7 widgets + KPIs) | SHIPPED | Aubs | Drag-drop, resize, customizable KPIs, all real data |
+| Action Queue (AI-powered) | SHIPPED | Aubs | Claude-generated priority recommendations |
+| CSV Upload Pipeline | SHIPPED | both | Upload, parse, score, tag, link attendees |
+| Lead Scoring Engine V2 | SHIPPED | Aubs | Standalone engine, configurable weights, ICP templates |
+| Score Breakdown UI | SHIPPED | Aubs | Signal-by-signal panel with 6 categories |
+| Lead Detail Drawer | SHIPPED | Aubs | Full panel with score, notes, disposition, keyboard nav |
+| Attribution Engine (3-phase) | SHIPPED | both | Email + domain + fuzzy matching, sourced/influenced |
+| Report Engine (18 types) | SHIPPED | Aubs | 11 event-level + 7 cross-event, Claude-generated, snapshot caching |
+| Executive Reports Dashboard | SHIPPED | Aubs | Multi-report inline expansion, per-event filtering |
+| Campaign Builder + AI Email Gen | SHIPPED | both | Personalized emails from 4 context layers |
+| Dynamic Segment Builder | SHIPPED | Aubs | Rule-based segments with preview |
+| Email Review Panel | SHIPPED | Aubs | Per-email review, edit, approve, test send |
+| Email Review Queue (3-panel) | SHIPPED | main | Full-screen review with contact context, approve/reject/skip |
+| Email Sequences (multi-step) | SHIPPED | main | Sequences with steps, delays, auto-advance, enrollment tracking |
+| Sequence Worker (5-min ticker) | SHIPPED | main | Auto-advances due steps to pending_review |
+| Campaign Clone | SHIPPED | Aubs | One-click clone from detail modal |
+| Campaign Pause/Resume | SHIPPED | main | Pause scheduled campaigns, resume to previous state |
+| Send Confirmation Modal | SHIPPED | main | Rich confirmation UI with summary, schedule toggle, timezone |
+| CAN-SPAM Unsubscribe | SHIPPED | main | Automatic footer injection, email consent checks |
+| Re-engagement Worker (daily) | SHIPPED | main | Auto-creates draft campaigns for stale post-event contacts |
+| AI Document Generators (3 types) | SHIPPED | main | KBYG, Executive Briefing, Sales Team Brief |
+| Timezone-Aware Scheduler | SHIPPED | both | Full schedule handler with email_schedule_queue |
+| Content Library CRUD | SHIPPED | both | Full metadata tagging, AI integration |
+| Excel Exports (3 types) | SHIPPED | both | Leads, attribution, campaigns as streaming .xlsx |
+| CRM Connection (Merge.dev) | SHIPPED | both | Salesforce/HubSpot OAuth, sync, disconnect |
+| Slack Notifications (5 triggers) | SHIPPED | both | Fire-and-forget with rate limiting |
+| Notification Banner (5 types) | SHIPPED | main | Persistent top-of-app banner, color-coded, clickable |
+| Scheduler (6+ automated jobs) | SHIPPED | both | Task deadlines, stagnation, auto-resolve, lead decay, review deadline checker |
+| Contacts (CRUD + dedup) | SHIPPED | both | Full CRUD, search, filter, find duplicates |
+| Settings (CRM + Slack) | SHIPPED | both | OAuth connections, webhook management |
+| Design System / Brand Refresh | SHIPPED | Aubs | Teal ombre palette, Cabinet Grotesk, fm-* tokens (37 files) |
+| Scoring/Pipeline/Attribution pages | SHELL | Aubs | Intentional placeholders for future UI |
+| Budgets/Vendors pages | SHELL | Aubs | Intentional placeholders for future features |
+| In-App Notification Bell/Dropdown | NOT BUILT | — | Bell icon present. No dropdown for browsing all notifications |
+| CRM Push (write-back) | NOT BUILT | — | Must ship for beta. Merge.dev write-back needed |
+| Team Management | NOT BUILT | — | No invite flow or role assignment |
+| Stripe Billing | NOT BUILT | — | Blocked on dependency approval |
+| Full Data Export | NOT BUILT | — | Specified but no implementation |
+| Email Digest (weekly) | NOT BUILT | — | No cron job, template, or opt-in flow |
 
 ---
 
@@ -1172,6 +1343,8 @@ High-level status across all major platform areas as of March 25, 2026.
 - `POST /api/v1/events/{eventID}/prospectus/extract` — Trigger extraction (AI)
 - `PUT /api/v1/events/{eventID}/prospectus/extraction/{id}/verify` — Verify extraction
 - `POST /api/v1/events/{eventID}/documents/kbyg` — Generate KBYG (AI)
+- `POST /api/v1/events/{eventID}/documents/exec-briefing` — Generate Executive Briefing (AI, main)
+- `POST /api/v1/events/{eventID}/documents/sales-brief` — Generate Sales Team Brief (AI, main)
 
 ### CSV Upload & Leads
 - `POST /api/v1/events/{eventID}/csv/upload` — Upload CSV
@@ -1300,6 +1473,26 @@ High-level status across all major platform areas as of March 25, 2026.
 - `GET /api/v1/events/{eventID}/export/attribution` — Export attribution (.xlsx)
 - `GET /api/v1/events/{eventID}/export/campaigns` — Export campaigns (.xlsx)
 
+### Sequences (main)
+- `POST /api/v1/sequences` — Create sequence
+- `GET /api/v1/sequences` — List sequences
+- `GET /api/v1/sequences/{sequenceID}` — Get sequence
+- `PATCH /api/v1/sequences/{sequenceID}` — Update sequence
+- `DELETE /api/v1/sequences/{sequenceID}` — Delete sequence
+- `POST /api/v1/sequences/{sequenceID}/enrollments` — Enroll contacts
+- `POST /api/v1/sequences/{sequenceID}/enrollments/{enrollmentID}/pause` — Pause enrollment
+- `POST /api/v1/sequences/{sequenceID}/enrollments/{enrollmentID}/resume` — Resume enrollment
+
+### Review Queue (main)
+- `POST /api/v1/campaigns/{campaignID}/emails/{emailID}/approve` — Approve email
+- `POST /api/v1/campaigns/{campaignID}/emails/{emailID}/reject` — Reject email
+- `POST /api/v1/campaigns/{campaignID}/emails/{emailID}/skip` — Skip email
+- `POST /api/v1/campaigns/{campaignID}/approve-all` — Approve all pending
+- `GET /api/v1/campaigns/{campaignID}/review-summary` — Review status counts
+
+### Admin (main)
+- `POST /api/v1/admin/reset-seed-data` — Reset all company data (admin-only)
+
 ### Other
 - `GET /health` — Health check
 - `POST /api/v1/track` — Activity tracking
@@ -1309,7 +1502,7 @@ High-level status across all major platform areas as of March 25, 2026.
 
 ---
 
-## Appendix C: Database Migration Index (001–026)
+## Appendix C: Database Migration Index (001–026 + main branch 009–012)
 
 | # | File | What It Creates/Changes |
 |---|------|------------------------|
@@ -1342,6 +1535,55 @@ High-level status across all major platform areas as of March 25, 2026.
 
 ---
 
-*FM_PlatformWalkthrough_V2.md — Supersedes V1*
+**Note on migration numbering:** Aubs-updates and main have divergent migration numbers. Main uses 009-012 for sequences, review queue, event fields, and task dependencies. Aubs-updates uses 009+ for onboarding, documents, checklists, scoring, etc. These will need renumbering during merge to avoid conflicts. Jack should renumber the Aubs migrations to start after main's highest migration number.
+
+---
+
+## Appendix D: Jack's Main Branch Features (Post-Divergence)
+
+These 13 commits on main were built after Aubs-updates diverged (commit 88e9ec1). They are **live on main** but **not on Aubs-updates**. Merge will require conflict resolution in shared files.
+
+### Features Added on Main
+
+| Feature | Key Files | Migration |
+|---------|-----------|-----------|
+| Email Sequences (multi-step) | sequences.go (859L), sequence_worker.go (254L), Sequences.tsx | 009 |
+| Email Review Queue (3-panel) | campaigns.go (updated), ReviewQueue.tsx (492L) | 010 |
+| CAN-SPAM Unsubscribe | campaigns.go (injectUnsubscribeFooter) | — |
+| AI Doc: Executive Briefing | documents.go (GenerateExecBriefing) | — |
+| AI Doc: Sales Team Brief | documents.go (GenerateSalesBrief) | — |
+| Notification Banner | NotificationBanner.tsx, AppShell.tsx | — |
+| Review Deadline Checker | scheduler.go (checkReviewDeadlines) | — |
+| Event Operational Fields (19) | events.go, EventEdit.tsx | 011 |
+| Task Dependencies | tasks.go, TasksTab.tsx | 012 |
+| RSVP Workflow (7 statuses) | event_sub.go, PeopleTab.tsx | — |
+| Event Health Indicator | OverviewTab.tsx | — |
+| Re-engagement Worker | reengagement.go (159L) | — |
+| Campaign Pause/Resume | campaigns.go | — |
+| Send Confirmation Modal | SendConfirmModal.tsx (173L) | — |
+| Onboarding Route Guard | AppShell.tsx | — |
+| Reset Seed Data (admin) | crm.go (ResetSeedData) | — |
+
+### Likely Merge Conflicts
+
+These files were modified on **both** branches and will need manual resolution:
+
+| File | Main Changes | Aubs Changes |
+|------|-------------|--------------|
+| `campaigns.go` | Review queue, pause/resume, CAN-SPAM, send filters | Clone, schedule, content library |
+| `tasks.go` | Dependencies, add/remove dependency endpoints | Extended task endpoints, soft delete |
+| `events.go` | 19 operational fields, calendar queries | Calendar queries, filter support |
+| `scheduler.go` | Review deadline checker, data race fix | Auto-resolve improvements, phase grouping |
+| `router.go` | Sequence routes, review routes, admin routes | Calendar, copilot, import, report engine routes |
+| `TasksTab.tsx` | Dependency UI, blocked indicators | Phase grouping, milestone badges, design refresh |
+| `PeopleTab.tsx` | RSVP dropdown, status filter | Lead detail drawer, design refresh |
+| `OverviewTab.tsx` | Health indicator, lifecycle actions, KPI breakdown | Design refresh |
+| `DocumentsTab.tsx` | Exec briefing + sales brief generate buttons | Prospectus upload, design refresh |
+| `AppShell.tsx` | Onboarding guard, notification banner | Layout updates |
+| `EventEdit.tsx` | 19 operational field inputs | Custom event type, reconcile trigger |
+
+---
+
+*FM_PlatformWalkthrough_V2.md — Version 2.1 — Supersedes V1*
 
 *This is a living document. Updated as features ship.*
